@@ -10,7 +10,7 @@ public class InputReader : MonoBehaviour
     {
         _direction = Input.GetAxisRaw("Horizontal");
 
-        if(Input.GetButtonDown("Jump"))
+        if(Input.GetButtonDown("Jump") || Input.GetKey(KeyCode.UpArrow))
         {
             _playerEntity.Jump();
         }
