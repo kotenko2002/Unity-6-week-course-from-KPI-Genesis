@@ -9,7 +9,7 @@ public class PlayerEntity : MonoBehaviour
 
     [Header("Jump")]
     [SerializeField] private float _jumpForce;
-    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask _groundLayer;
 
     [SerializeField] private DirectionalCameraPair _cameras;
 
@@ -22,12 +22,12 @@ public class PlayerEntity : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
         _collider = GetComponent<BoxCollider2D>();
 
-        _isGrounded = _collider.IsTouchingLayers(groundLayer);
+        _isGrounded = _collider.IsTouchingLayers(_groundLayer);
     }
 
     private void Update()
     {
-        _isGrounded = _collider.IsTouchingLayers(groundLayer);
+        _isGrounded = _collider.IsTouchingLayers(_groundLayer);
     }
 
     public void MoveHorizontally(float direction)

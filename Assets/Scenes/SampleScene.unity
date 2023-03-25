@@ -18715,7 +18715,7 @@ MonoBehaviour:
   _horizontalSpeed: 8
   _direction: 0
   _jumpForce: 10
-  groundLayer:
+  _groundLayer:
     serializedVersion: 2
     m_Bits: 256
   _cameras:
