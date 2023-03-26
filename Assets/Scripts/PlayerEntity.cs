@@ -1,4 +1,4 @@
-using Assets.Scripts.Core.Enums;
+using Assets.Scripts.Player;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
