@@ -1,8 +1,11 @@
+using Assets.Scripts.Core.Enums;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerEntity : MonoBehaviour
 {
+    [SerializeField] private Animator _animator;
+
     [Header("HorizontalMovement")]
     [SerializeField] private float _horizontalSpeed;
     [SerializeField] private Direction _direction;
@@ -16,6 +19,8 @@ public class PlayerEntity : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private BoxCollider2D _collider;
     private bool _isGrounded;
+    private Vector2 _movement;
+    private AnimationType _currentAnimationType;
 
     private void Start()
     {
@@ -28,10 +33,13 @@ public class PlayerEntity : MonoBehaviour
     private void Update()
     {
         _isGrounded = _collider.IsTouchingLayers(_groundLayer);
+
+        UpdateAnimations();
     }
 
     public void MoveHorizontally(float direction)
     {
+        _movement.x = direction;
         SetFaceDirection(direction);
 
         _rigidbody.velocity = new Vector2(direction * _horizontalSpeed, _rigidbody.velocity.y);
@@ -66,5 +74,40 @@ public class PlayerEntity : MonoBehaviour
         {
             camera.Value.enabled = camera.Key == _direction;
         }
+    }
+
+    private void PlayAnimation(AnimationType animationType, bool active)
+    {
+        if (!active)
+        {
+            if(_currentAnimationType == AnimationType.Idle || _currentAnimationType != animationType)
+            {
+                return;
+            }
+
+            _currentAnimationType = AnimationType.Idle;
+            PlayAnimation(_currentAnimationType);
+            return;
+        }
+
+        if(_currentAnimationType >= animationType)
+        {
+            return;
+        }
+
+        _currentAnimationType = animationType;
+        PlayAnimation(_currentAnimationType);
+    }
+
+    private void PlayAnimation(AnimationType animationType)
+    {
+        _animator.SetInteger(nameof(AnimationType), (int)animationType);
+    }
+
+    private void UpdateAnimations()
+    {
+        PlayAnimation(AnimationType.Idle, true);
+        PlayAnimation(AnimationType.Run, _movement.magnitude > 0);
+        PlayAnimation(AnimationType.Jump, !_isGrounded);
     }
 }
