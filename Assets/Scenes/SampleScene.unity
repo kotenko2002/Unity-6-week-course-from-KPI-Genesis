@@ -235,7 +235,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 164283320}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 372f487c0207cee4e8b2d6366fe63fb3, type: 3}
+  m_Script: {fileID: 11500000, guid: fb5c0fcbe75bead46a88fc8db4024e58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _joystick: {fileID: 2010289894}

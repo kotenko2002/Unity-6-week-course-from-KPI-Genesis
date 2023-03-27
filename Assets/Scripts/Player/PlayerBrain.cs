@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Scripts.InputReader;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets.Scripts.Player
