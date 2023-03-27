@@ -18821,10 +18821,11 @@ MonoBehaviour:
   _horizontalMovementData:
     <HorizontalSpeed>k__BackingField: 8
     <Direction>k__BackingField: 0
-  _jumpForce: 10
-  _groundLayer:
-    serializedVersion: 2
-    m_Bits: 256
+  _jumperData:
+    <JumpForce>k__BackingField: 10
+    <GroundLayer>k__BackingField:
+      serializedVersion: 2
+      m_Bits: 256
   _cameras:
     _rightCamera: {fileID: 1645438559}
     _leftCamera: {fileID: 749868093}
@@ -18938,7 +18939,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -67.68466, y: -16.62, z: -10.113401}
+  m_LocalPosition: {x: -72.015335, y: -16.62, z: -10.113401}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
