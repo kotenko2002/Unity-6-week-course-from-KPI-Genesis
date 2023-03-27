@@ -19,7 +19,6 @@ public class PlayerEntity : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private BoxCollider2D _collider;
     private bool _isGrounded;
-    private Vector2 _movement;
     private AnimationType _currentAnimationType;
 
     private HorizontalMover _horizontalMover;
