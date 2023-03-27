@@ -1,3 +1,5 @@
+using Assets.Scripts.Movement.Controller;
+using Assets.Scripts.Movement.Data;
 using Assets.Scripts.Player;
 using UnityEngine;
 
@@ -6,9 +8,7 @@ public class PlayerEntity : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
 
-    [Header("HorizontalMovement")]
-    [SerializeField] private float _horizontalSpeed;
-    [SerializeField] private Direction _direction;
+    [SerializeField] private HorizontalMovementData _horizontalMovementData;
 
     [Header("Jump")]
     [SerializeField] private float _jumpForce;
@@ -22,10 +22,13 @@ public class PlayerEntity : MonoBehaviour
     private Vector2 _movement;
     private AnimationType _currentAnimationType;
 
+    private HorizontalMover _horizontalMover;
+
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _collider = GetComponent<BoxCollider2D>();
+        _horizontalMover = new HorizontalMover(_rigidbody, _horizontalMovementData);
 
         _isGrounded = _collider.IsTouchingLayers(_groundLayer);
     }
@@ -35,15 +38,18 @@ public class PlayerEntity : MonoBehaviour
         _isGrounded = _collider.IsTouchingLayers(_groundLayer);
 
         UpdateAnimations();
+        UpdateCameras();
     }
 
-    public void MoveHorizontally(float direction)
+    private void UpdateCameras()
     {
-        _movement.x = direction;
-        SetFaceDirection(direction);
-
-        _rigidbody.velocity = new Vector2(direction * _horizontalSpeed, _rigidbody.velocity.y);
+        foreach (var camera in _cameras.DirectionCameras)
+        {
+            camera.Value.enabled = camera.Key == _horizontalMover.Direction;
+        }
     }
+
+    public void MoveHorizontally(float direction) => _horizontalMover.MoveHorizontally(direction);
 
     public void Jump()
     {
@@ -54,26 +60,6 @@ public class PlayerEntity : MonoBehaviour
 
         _isGrounded = true;
         _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, _jumpForce);
-    }
-
-    private void SetFaceDirection(float direction)
-    {
-        if ((_direction == Direction.Right && direction < 0)
-            || (_direction == Direction.Left && direction > 0))
-        {
-            Flip();
-        }
-    }
-
-    private void Flip()
-    {
-        transform.Rotate(0, 180, 0);
-        _direction = _direction == Direction.Right ? Direction.Left : Direction.Right;
-
-        foreach (var camera in _cameras.DirectionCameras)
-        {
-            camera.Value.enabled = camera.Key == _direction;
-        }
     }
 
     private void PlayAnimation(AnimationType animationType, bool active)
@@ -107,7 +93,7 @@ public class PlayerEntity : MonoBehaviour
     private void UpdateAnimations()
     {
         PlayAnimation(AnimationType.Idle, true);
-        PlayAnimation(AnimationType.Run, _movement.magnitude > 0);
+        PlayAnimation(AnimationType.Run, _horizontalMover.IsMoving);
         PlayAnimation(AnimationType.Jump, !_isGrounded);
     }
 }

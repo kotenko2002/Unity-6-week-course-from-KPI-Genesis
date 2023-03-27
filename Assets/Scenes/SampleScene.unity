@@ -18817,8 +18817,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 505076183}
-  _horizontalSpeed: 8
-  _direction: 0
+  _horizontalMovementData:
+    <HorizontalSpeed>k__BackingField: 8
+    <Direction>k__BackingField: 0
   _jumpForce: 10
   _groundLayer:
     serializedVersion: 2
