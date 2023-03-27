@@ -1,3 +1,4 @@
+using Assets.Scripts.Core.Animation;
 using Assets.Scripts.Movement.Controller;
 using Assets.Scripts.Movement.Data;
 using Assets.Scripts.Player;
@@ -6,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerEntity : MonoBehaviour
 {
-    [SerializeField] private Animator _animator;
+    [SerializeField] private AnimatorController _animator;
 
     [SerializeField] private HorizontalMovementData _horizontalMovementData;
 
@@ -19,7 +20,6 @@ public class PlayerEntity : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private BoxCollider2D _collider;
     private bool _isGrounded;
-    private AnimationType _currentAnimationType;
 
     private HorizontalMover _horizontalMover;
 
@@ -40,14 +40,6 @@ public class PlayerEntity : MonoBehaviour
         UpdateCameras();
     }
 
-    private void UpdateCameras()
-    {
-        foreach (var camera in _cameras.DirectionCameras)
-        {
-            camera.Value.enabled = camera.Key == _horizontalMover.Direction;
-        }
-    }
-
     public void MoveHorizontally(float direction) => _horizontalMover.MoveHorizontally(direction);
 
     public void Jump()
@@ -60,39 +52,19 @@ public class PlayerEntity : MonoBehaviour
         _isGrounded = true;
         _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, _jumpForce);
     }
-
-    private void PlayAnimation(AnimationType animationType, bool active)
-    {
-        if (!active)
-        {
-            if(_currentAnimationType == AnimationType.Idle || _currentAnimationType != animationType)
-            {
-                return;
-            }
-
-            _currentAnimationType = AnimationType.Idle;
-            PlayAnimation(_currentAnimationType);
-            return;
-        }
-
-        if(_currentAnimationType >= animationType)
-        {
-            return;
-        }
-
-        _currentAnimationType = animationType;
-        PlayAnimation(_currentAnimationType);
-    }
-
-    private void PlayAnimation(AnimationType animationType)
-    {
-        _animator.SetInteger(nameof(AnimationType), (int)animationType);
-    }
-
+    
     private void UpdateAnimations()
     {
-        PlayAnimation(AnimationType.Idle, true);
-        PlayAnimation(AnimationType.Run, _horizontalMover.IsMoving);
-        PlayAnimation(AnimationType.Jump, !_isGrounded);
+        _animator.PlayAnimation(AnimationType.Idle, true);
+        _animator.PlayAnimation(AnimationType.Run, _horizontalMover.IsMoving);
+        _animator.PlayAnimation(AnimationType.Jump, !_isGrounded);
+    }
+
+    private void UpdateCameras()
+    {
+        foreach (var camera in _cameras.DirectionCameras)
+        {
+            camera.Value.enabled = camera.Key == _horizontalMover.Direction;
+        }
     }
 }
