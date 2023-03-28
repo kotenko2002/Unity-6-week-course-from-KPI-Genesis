@@ -47,9 +47,24 @@ TagManager:
   - name: Middle
     uniqueID: 882291381
     locked: 0
-  - name: Entity
-    uniqueID: 3383494235
-    locked: 0
   - name: Fore
     uniqueID: 2415678235
+    locked: 0
+  - name: SkyLayer
+    uniqueID: 2810368007
+    locked: 0
+  - name: FirstFloraLayer
+    uniqueID: 289015719
+    locked: 0
+  - name: SecondFloraLayer
+    uniqueID: 191089417
+    locked: 0
+  - name: MineLayer
+    uniqueID: 4230486571
+    locked: 0
+  - name: GameWorldLayer
+    uniqueID: 189837525
+    locked: 0
+  - name: Entity
+    uniqueID: 2078903463
     locked: 0
