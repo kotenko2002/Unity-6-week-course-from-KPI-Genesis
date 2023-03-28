@@ -65,6 +65,9 @@ TagManager:
   - name: GameWorldLayer
     uniqueID: 189837525
     locked: 0
+  - name: GameWorldLayerNotGround
+    uniqueID: 1188183441
+    locked: 0
   - name: Entity
     uniqueID: 2078903463
     locked: 0
