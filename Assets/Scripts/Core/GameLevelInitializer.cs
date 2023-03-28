@@ -1,6 +1,8 @@
-﻿using Assets.Scripts.InputReader;
+﻿using Assets.Scripts.Core.Services.Updater;
+using Assets.Scripts.InputReader;
 using Assets.Scripts.Player;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Core
@@ -11,14 +13,28 @@ namespace Assets.Scripts.Core
         [SerializeField] private GameUIInputView _gameUIInputView;
 
         private ExternalDevicesInputReader _externalDevicesInput;
-        private PlayerBrain _playerBrain;
+        private PlayerSystem _playerSystem;
+        private ProjectUpdater _projectUpdater;
 
-        private bool _onPause = false;
+        private List<IDisposable> _disposables;
 
         private void Awake()
         {
+            _disposables = new List<IDisposable>();
+
+            if(ProjectUpdater.Instance == null)
+            {
+                _projectUpdater = new GameObject().AddComponent<ProjectUpdater>();
+            }
+            else
+            {
+                _projectUpdater = ProjectUpdater.Instance as ProjectUpdater;
+            }
+
             _externalDevicesInput = new ExternalDevicesInputReader();
-            _playerBrain = new PlayerBrain(_playerEntity, new List<IEntityInputSourse>
+            _disposables.Add(_externalDevicesInput);
+
+            _playerSystem = new PlayerSystem(_playerEntity, new List<IEntityInputSourse>
             {
                 _gameUIInputView,
                 _externalDevicesInput
@@ -27,22 +43,18 @@ namespace Assets.Scripts.Core
 
         private void Update()
         {
-            if (_onPause)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                return;
+                _projectUpdater.IsPaused = !_projectUpdater.IsPaused;
             }
-
-            _externalDevicesInput.OnUpdate();
         }
 
-        private void FixedUpdate()
+        private void OnDestroy()
         {
-            if (_onPause)
+            foreach (var disposable in _disposables)
             {
-                return;
+                disposable.Dispose();
             }
-
-            _playerBrain.OnFixedUpdate();
         }
     }
 }

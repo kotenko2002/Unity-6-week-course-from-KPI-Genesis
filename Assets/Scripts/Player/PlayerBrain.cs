@@ -1,10 +1,12 @@
-﻿using Assets.Scripts.InputReader;
+﻿using Assets.Scripts.Core.Services.Updater;
+using Assets.Scripts.InputReader;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Assets.Scripts.Player
 {
-    public class PlayerBrain
+    public class PlayerBrain : IDisposable
     {
         private readonly PlayerEntity _playerEntity;
         private readonly List<IEntityInputSourse> _inputSources;
@@ -13,9 +15,13 @@ namespace Assets.Scripts.Player
         {
             _playerEntity = playerEntity;
             _inputSources = inputSources;
+
+            ProjectUpdater.Instance.FixedUpdateCalled += OnFixedUpdate;
         }
 
-        public void OnFixedUpdate()
+        public void Dispose() => ProjectUpdater.Instance.FixedUpdateCalled -= OnFixedUpdate;
+
+        private void OnFixedUpdate()
         {
             _playerEntity.MoveHorizontally(GeteHorizontalDirection());
 
